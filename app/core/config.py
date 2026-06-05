@@ -1,7 +1,8 @@
 from functools import lru_cache
+from typing import Annotated
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -11,13 +12,15 @@ class Settings(BaseSettings):
     app_env: str = "local"
     api_v1_prefix: str = "/api/v1"
     database_url: str = "postgresql+asyncpg://fyfit:fyfit@localhost:5432/fyfit"
-    sync_database_url: str = "postgresql://fyfit:fyfit@localhost:5432/fyfit"
+    sync_database_url: str = "postgresql+psycopg://fyfit:fyfit@localhost:5432/fyfit"
     redis_url: str = "redis://localhost:6379/0"
     firebase_project_id: str | None = None
     firebase_credentials_json: str | None = None
     openai_api_key: str | None = None
     anthropic_api_key: str | None = None
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
+    cors_origins: Annotated[list[str], NoDecode] = Field(
+        default_factory=lambda: ["http://localhost:3000"]
+    )
     rate_limit_per_minute: int = 120
 
     @field_validator("cors_origins", mode="before")

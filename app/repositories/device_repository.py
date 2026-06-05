@@ -15,6 +15,15 @@ class DeviceRepository(BaseRepository[Device]):
         )
         return list(result.scalars().all())
 
+    async def get_by_user_serial(self, user_id: UUID, serial_number: str) -> Device | None:
+        return await self.first(
+            select(Device).where(
+                Device.user_id == user_id,
+                Device.serial_number == serial_number,
+                Device.deleted_at.is_(None),
+            )
+        )
+
     async def get_owned(self, user_id: UUID, device_id: UUID) -> Device | None:
         return await self.first(
             select(Device).where(

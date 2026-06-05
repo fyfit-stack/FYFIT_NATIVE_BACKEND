@@ -16,6 +16,10 @@ class DeviceService:
         self.devices = DeviceRepository(db)
 
     async def pair(self, user: User, payload: DevicePairRequest) -> Device:
+        existing = await self.devices.get_by_user_serial(user.id, payload.serial_number)
+        if existing is not None:
+            return existing
+
         device = Device(
             user_id=user.id,
             device_type=payload.device_type,

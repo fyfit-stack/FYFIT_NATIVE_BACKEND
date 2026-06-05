@@ -209,7 +209,7 @@ def _sensor_columns():
         sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True),
         sa.Column("user_id", postgresql.UUID(as_uuid=True), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False),
         sa.Column("device_id", postgresql.UUID(as_uuid=True), sa.ForeignKey("devices.id", ondelete="CASCADE"), nullable=False),
-        sa.Column("recorded_at", sa.DateTime(timezone=True), nullable=False),
+        sa.Column("recorded_at", sa.DateTime(timezone=True), primary_key=True),
         sa.Column("source_payload", postgresql.JSONB()),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
