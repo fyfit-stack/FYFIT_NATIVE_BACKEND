@@ -5,6 +5,8 @@ from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
@@ -14,6 +16,8 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://fyfit:fyfit@localhost:5432/fyfit"
     sync_database_url: str = "postgresql+psycopg://fyfit:fyfit@localhost:5432/fyfit"
     redis_url: str = "redis://localhost:6379/0"
+    secret_key: str = "dev-secret-key-change-me"
+    access_token_expire_minutes: int = 43200 # 30 days
     firebase_project_id: str | None = None
     firebase_credentials_json: str | None = None
     openai_api_key: str | None = None

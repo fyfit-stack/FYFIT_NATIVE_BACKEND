@@ -20,6 +20,8 @@ dependencies = [
     "redis>=5.0.8",
     "sqlalchemy>=2.0.32",
     "uvicorn[standard]>=0.30.5",
+    "pyjwt>=2.8.0",
+    "passlib[bcrypt]>=1.7.4",
 ]
 
 [project.optional-dependencies]

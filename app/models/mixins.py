@@ -1,13 +1,17 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, func
+from sqlalchemy import DateTime, func, BigInteger
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 
 class UUIDPrimaryKeyMixin:
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
+
+class BigIntPrimaryKeyMixin:
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
 
 class TimestampMixin:
