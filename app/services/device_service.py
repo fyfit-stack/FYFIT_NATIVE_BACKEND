@@ -22,12 +22,13 @@ class DeviceService:
 
         device = Device(
             user_id=user.id,
-            device_type=payload.device_type,
-            model=payload.model.upper(),
+            category=payload.device_type,
+            model_name=payload.model,
             serial_number=payload.serial_number,
             firmware_version=payload.firmware_version,
-            display_name=payload.display_name,
+            display_name=payload.display_name or f"{payload.model} Device",
             metadata_=payload.metadata,
+            paired_at=datetime.now(timezone.utc),
         )
         await self.devices.add(device)
         await self.db.commit()
@@ -57,4 +58,3 @@ class DeviceService:
 
     async def mark_synced(self, device: Device) -> None:
         device.last_sync_at = datetime.now(timezone.utc)
-

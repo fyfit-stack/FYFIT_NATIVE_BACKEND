@@ -16,7 +16,7 @@ class RawSleepSession(BaseModel):
 
 
 class BatchSyncRequest(BaseModel):
-    device_id: UUID
+    device_id: UUID | None = None
     heart_rate: list[RawReading] = Field(default_factory=list)
     hrv: list[RawReading] = Field(default_factory=list)
     spo2: list[RawReading] = Field(default_factory=list)

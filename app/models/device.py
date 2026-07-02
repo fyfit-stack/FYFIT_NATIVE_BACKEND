@@ -6,10 +6,10 @@ from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
-from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
+from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin, SoftDeleteMixin
 
 
-class Device(Base, UUIDPrimaryKeyMixin, TimestampMixin):
+class Device(Base, UUIDPrimaryKeyMixin, TimestampMixin, SoftDeleteMixin):
     __tablename__ = "devices"
     # Keeping the old unique constraint if serial_number is not globally unique in current data, but spec says "globally unique". Let's stick to unique on serial_number column.
     # The spec specifies serial_number UNIQUE. So we can add unique=True.
@@ -30,4 +30,12 @@ class Device(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     metadata_: Mapped[dict | None] = mapped_column("metadata", JSONB)
 
     user = relationship("User", back_populates="devices")
+
+    @property
+    def device_type(self) -> str:
+        return self.category
+
+    @property
+    def model(self) -> str | None:
+        return self.model_name
 

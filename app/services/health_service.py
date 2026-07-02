@@ -26,3 +26,14 @@ class HealthService:
         model = self.health.model_map[metric]
         return await self.health.readings(model, user.id, start=start, end=end, limit=limit, offset=offset)
 
+    async def sleep_sessions(
+        self,
+        user: User,
+        *,
+        start: datetime | None = None,
+        end: datetime | None = None,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> list:
+        return await self.health.sleep_sessions(user.id, start=start, end=end, limit=limit, offset=offset)
+

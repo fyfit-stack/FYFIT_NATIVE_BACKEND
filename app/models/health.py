@@ -77,6 +77,7 @@ class ActivityReading(Base, UUIDPrimaryKeyMixin):
 
 class SleepSession(Base, UUIDPrimaryKeyMixin):
     __tablename__ = "sleep_sessions"
+    __table_args__ = (UniqueConstraint("user_id", "recorded_date", name="idx_sleep_user_date"),)
 
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     device_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("devices.id", ondelete="CASCADE"), index=True)
