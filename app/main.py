@@ -25,15 +25,10 @@ app = FastAPI(title=settings.app_name, lifespan=lifespan)
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     tb = traceback.format_exc()
-    logger.error(f"Global exception caught: {exc}\n{tb}")
+    logger.error(f"Internal Server Error: {exc}\n{tb}")
     return JSONResponse(
         status_code=500,
-        content={
-            "detail": "Internal Server Error",
-            "error_type": type(exc).__name__,
-            "error_message": str(exc),
-            "traceback": tb.splitlines()
-        }
+        content={"detail": "Internal Server Error"}
     )
 
 app.add_middleware(
