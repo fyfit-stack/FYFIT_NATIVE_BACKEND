@@ -1,20 +1,29 @@
-from redis.asyncio import Redis
+import logging
 
 from app.core.config import settings
 
-redis_client: Redis | None = None
+logger = logging.getLogger(__name__)
+
+redis_client = None
 
 
-async def init_redis() -> Redis:
+async def init_redis():
+    """Try to connect to Redis. If unavailable, log a warning and continue."""
     global redis_client
-    redis_client = Redis.from_url(settings.redis_url, decode_responses=True)
-    return redis_client
+    try:
+        from redis.asyncio import Redis
+        redis_client = Redis.from_url(settings.redis_url, decode_responses=True)
+        await redis_client.ping()  # Actually test the connection
+        logger.info("Redis connected successfully.")
+        return redis_client
+    except Exception as e:
+        logger.warning(f"Redis not available, running without cache: {e}")
+        redis_client = None
+        return None
 
 
-async def get_redis() -> Redis:
-    global redis_client
-    if redis_client is None:
-        redis_client = await init_redis()
+async def get_redis():
+    """Return redis client or None if not available."""
     return redis_client
 
 
